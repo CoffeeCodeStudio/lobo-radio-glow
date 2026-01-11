@@ -55,6 +55,7 @@ const LiveChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [fireAnimations, setFireAnimations] = useState<Set<string>>(new Set());
+  const [sessionId] = useState(() => crypto.randomUUID()); // Generate unique session ID
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -203,6 +204,7 @@ const LiveChat = () => {
     const { error } = await supabase.from("chat_messages").insert({
       nickname: nickname.trim(),
       message: trimmedMessage,
+      session_id: sessionId,
     });
 
     if (error) {
@@ -225,6 +227,7 @@ const LiveChat = () => {
     const { error } = await supabase.from("chat_messages").insert({
       nickname: nickname.trim(),
       message: emote,
+      session_id: sessionId,
     });
 
     if (error) {
