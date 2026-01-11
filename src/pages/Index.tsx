@@ -1,11 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Header from "@/components/Header";
+import HeroSection from "@/components/HeroSection";
+import AboutSection from "@/components/AboutSection";
+import ScheduleSection from "@/components/ScheduleSection";
+import Footer from "@/components/Footer";
+import NowPlayingBar from "@/components/NowPlayingBar";
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-background text-foreground relative overflow-x-hidden">
+      {/* Light leak backgrounds */}
+      <div className="light-leak-purple"></div>
+      <div className="light-leak-blue"></div>
+
+      {/* Main content */}
+      <div className="relative z-10">
+        <Header />
+        <main>
+          <HeroSection />
+          <AboutSection />
+          <ScheduleSection />
+          <Footer />
+        </main>
+        <NowPlayingBar />
       </div>
     </div>
   );
