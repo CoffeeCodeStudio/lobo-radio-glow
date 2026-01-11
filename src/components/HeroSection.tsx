@@ -1,6 +1,5 @@
-import djLoboImage from "@/assets/dj-lobo.jpg";
+import djLoboImage from "@/assets/dj-lobo-real.jpg";
 import { Radio } from "lucide-react";
-
 const HeroSection = () => {
   const scrollToSchedule = () => {
     document.getElementById("schedule")?.scrollIntoView({ behavior: "smooth" });
