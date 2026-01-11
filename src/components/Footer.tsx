@@ -1,9 +1,9 @@
-import { Instagram, Facebook, Headphones, Radio } from "lucide-react";
+import { Instagram, Facebook, Radio, ExternalLink } from "lucide-react";
 
 const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/djloboradio",
   facebook: "https://www.facebook.com/djloboradiodjs/",
-  mixcloud: "https://www.mixcloud.com/DjLobo75/",
+  zenoPlayer: "https://zeno.fm/radio/dj-lobo-radio-o85p/",
 };
 
 const Footer = () => {
@@ -55,13 +55,13 @@ const Footer = () => {
             </li>
             <li>
               <a
-                href={SOCIAL_LINKS.mixcloud}
+                href={SOCIAL_LINKS.zenoPlayer}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Lyssna på DJ Lobo på Mixcloud (öppnas i nytt fönster)"
+                aria-label="Lyssna på DJ Lobo Radio på Zeno.fm (öppnas i nytt fönster)"
                 className="tap-target w-12 h-12 glass-card rounded-full flex items-center justify-center hover:border-neon-pink/50 transition-colors group focus-neon"
               >
-                <Headphones className="w-5 h-5 text-muted-foreground group-hover:text-neon-pink transition-colors" aria-hidden="true" />
+                <ExternalLink className="w-5 h-5 text-muted-foreground group-hover:text-neon-pink transition-colors" aria-hidden="true" />
               </a>
             </li>
           </ul>
@@ -76,7 +76,11 @@ const Footer = () => {
         <nav aria-label="Juridiska länkar">
           <ul className="flex justify-center gap-3 sm:gap-4 text-xs sm:text-sm">
             <li>
-              <a href="#" className="text-neon-cyan hover:underline focus-neon rounded px-1">
+              <a 
+                href="#" 
+                className="text-neon-cyan hover:underline focus-neon rounded px-1"
+                aria-label="Läs vår integritetspolicy"
+              >
                 Integritetspolicy
               </a>
             </li>
@@ -84,7 +88,11 @@ const Footer = () => {
               <span className="text-muted-foreground">•</span>
             </li>
             <li>
-              <a href="#" className="text-neon-cyan hover:underline focus-neon rounded px-1">
+              <a 
+                href="#" 
+                className="text-neon-cyan hover:underline focus-neon rounded px-1"
+                aria-label="Läs våra användarvillkor"
+              >
                 Användarvillkor
               </a>
             </li>
