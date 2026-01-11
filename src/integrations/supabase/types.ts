@@ -14,24 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_bans: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          nickname: string | null
+          reason: string | null
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          nickname?: string | null
+          reason?: string | null
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          nickname?: string | null
+          reason?: string | null
+          session_id?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           created_at: string
           id: string
           message: string
           nickname: string
+          session_id: string | null
         }
         Insert: {
           created_at?: string
           id?: string
           message: string
           nickname: string
+          session_id?: string | null
         }
         Update: {
           created_at?: string
           id?: string
           message?: string
           nickname?: string
+          session_id?: string | null
         }
         Relationships: []
       }
