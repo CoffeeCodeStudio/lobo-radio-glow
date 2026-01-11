@@ -1,9 +1,14 @@
 import { useEffect, useRef } from "react";
 import djLoboAboutImage from "@/assets/dj-lobo-about.jpg";
 import { Music, Headphones, Zap, Disc } from "lucide-react";
+import { useBranding } from "@/hooks/useBranding";
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const { branding } = useBranding();
+
+  // Use dynamic hero image if available, otherwise use the default
+  const heroImage = branding?.hero_image_url || djLoboAboutImage;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -106,7 +111,7 @@ const AboutSection = () => {
             {/* DJ Image */}
             <div className="scroll-reveal glass-card overflow-hidden">
               <img
-                src={djLoboAboutImage}
+                src={heroImage}
                 alt="DJ Lobo spelar latinmusik live"
                 className="w-full h-64 sm:h-80 object-cover"
               />
