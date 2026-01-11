@@ -6,11 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Trash2, Send, Users, MessageSquare, Shield, Ban, Radio, ArrowLeft, LogOut } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Trash2, Send, Users, MessageSquare, Shield, Ban, Radio, ArrowLeft, LogOut, Palette } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { usePresenceObserver } from "@/hooks/usePresence";
 import { useAuth } from "@/hooks/useAuth";
 import AdminLogin from "@/components/AdminLogin";
+import BrandingTab from "@/components/admin/BrandingTab";
 
 interface ChatMessage {
   id: string;
@@ -280,244 +282,265 @@ const Admin = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8 relative z-10">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <Card className="glass-card">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-lg icon-gradient-cyan flex items-center justify-center relative">
-                  <Users className="w-6 h-6 text-white" />
-                  {listenerCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                  )}
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold text-foreground">{listenerCount}</p>
-                  <p className="text-sm text-muted-foreground">Live Listeners</p>
-                </div>
-              </div>
-              {listeners.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-border/50">
-                  <p className="text-xs text-muted-foreground mb-2">Active users:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {listeners.slice(0, 5).map((listener, idx) => (
-                      <span 
-                        key={idx}
-                        className="text-xs px-2 py-0.5 rounded-full bg-muted/50 text-foreground"
-                      >
-                        {listener.nickname}
-                      </span>
-                    ))}
-                    {listeners.length > 5 && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-muted/50 text-muted-foreground">
-                        +{listeners.length - 5} more
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-          
-          <Card className="glass-card">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-lg icon-gradient-pink flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold text-foreground">{messages.length}</p>
-                  <p className="text-sm text-muted-foreground">Chat Messages</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card className="glass-card">
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-lg icon-gradient-purple flex items-center justify-center">
-                  <Ban className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-2xl font-display font-bold text-foreground">{bannedUsers.length}</p>
-                  <p className="text-sm text-muted-foreground">Banned Users</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <Tabs defaultValue="moderation" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8 glass-card">
+            <TabsTrigger value="moderation" className="data-[state=active]:bg-primary/20">
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Chat Moderation
+            </TabsTrigger>
+            <TabsTrigger value="branding" className="data-[state=active]:bg-primary/20">
+              <Palette className="w-4 h-4 mr-2" />
+              Branding & Identity
+            </TabsTrigger>
+          </TabsList>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Admin Broadcast */}
-          <Card className="glass-card-pink">
-            <CardHeader>
-              <CardTitle className="font-display flex items-center gap-2">
-                <Send className="w-5 h-5 text-primary" />
-                Admin Broadcast
-              </CardTitle>
-              <CardDescription>Send an official message to the chat</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-2">
-                <Input
-                  value={adminMessage}
-                  onChange={(e) => setAdminMessage(e.target.value)}
-                  placeholder="Type your announcement..."
-                  className="bg-input border-border"
-                  maxLength={200}
-                  onKeyDown={(e) => e.key === "Enter" && handleSendAdminMessage()}
-                />
-                <Button 
-                  onClick={handleSendAdminMessage}
-                  className="neon-glow-pink"
-                  disabled={!adminMessage.trim()}
-                >
-                  <Send className="w-4 h-4" />
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Message will appear as "👑 DJ Lobo" with 📢 prefix
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* Banned Users */}
-          <Card className="glass-card">
-            <CardHeader>
-              <CardTitle className="font-display flex items-center gap-2">
-                <Ban className="w-5 h-5 text-destructive" />
-                Shadow-Banned Users
-              </CardTitle>
-              <CardDescription>Users who can't send visible messages</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[150px]">
-                {bannedUsers.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-4">
-                    No banned users
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {bannedUsers.map((user) => (
-                      <div 
-                        key={user.id}
-                        className="flex items-center justify-between p-2 rounded-lg bg-muted/30"
-                      >
-                        <div>
-                          <p className="font-medium text-sm">{user.nickname || "Unknown"}</p>
-                          <p className="text-xs text-muted-foreground">
-                            Banned: {formatTime(user.created_at)}
-                          </p>
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleUnbanUser(user.id)}
-                          className="text-xs"
-                        >
-                          Unban
-                        </Button>
-                      </div>
-                    ))}
+          {/* Chat Moderation Tab */}
+          <TabsContent value="moderation" className="space-y-6">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="glass-card">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg icon-gradient-cyan flex items-center justify-center relative">
+                      <Users className="w-6 h-6 text-white" />
+                      {listenerCount > 0 && (
+                        <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-2xl font-display font-bold text-foreground">{listenerCount}</p>
+                      <p className="text-sm text-muted-foreground">Live Listeners</p>
+                    </div>
                   </div>
-                )}
-              </ScrollArea>
-            </CardContent>
-          </Card>
-
-          {/* Recent Messages */}
-          <Card className="glass-card lg:col-span-2">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="font-display flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5 text-secondary" />
-                    Recent Chat Messages
-                  </CardTitle>
-                  <CardDescription>Manage and moderate chat messages</CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={fetchMessages}>
-                    Refresh
-                  </Button>
-                  <Button 
-                    variant="destructive" 
-                    size="sm" 
-                    onClick={handleClearAllMessages}
-                    disabled={messages.length === 0}
-                  >
-                    <Trash2 className="w-3 h-3 mr-1" />
-                    Clear All
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px]">
-                {loading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <div className="loading-spinner" />
-                  </div>
-                ) : messages.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-8">
-                    No messages yet
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {messages.map((msg) => (
-                      <div 
-                        key={msg.id}
-                        className="flex items-start justify-between p-3 rounded-lg bg-muted/20 hover:bg-muted/30 transition-colors group"
-                      >
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-medium text-sm text-primary">
-                              {msg.nickname}
-                            </span>
-                            <span className="text-xs text-muted-foreground">
-                              {formatTime(msg.created_at)}
-                            </span>
-                          </div>
-                          <p className="text-sm text-foreground break-words">
-                            {msg.message}
-                          </p>
-                          {msg.session_id && (
-                            <p className="text-xs text-muted-foreground mt-1 font-mono">
-                              Session: {msg.session_id.substring(0, 8)}...
-                            </p>
-                          )}
-                        </div>
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
-                          {msg.session_id && msg.session_id !== "admin-broadcast" && (
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="h-8 w-8 text-orange-500 hover:text-orange-400 hover:bg-orange-500/10"
-                              onClick={() => handleBanUser(msg.session_id!, msg.nickname)}
-                              title="Ban user"
-                            >
-                              <Ban className="w-4 h-4" />
-                            </Button>
-                          )}
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                            onClick={() => handleDeleteMessage(msg.id)}
-                            title="Delete message"
+                  {listeners.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-border/50">
+                      <p className="text-xs text-muted-foreground mb-2">Active users:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {listeners.slice(0, 5).map((listener, idx) => (
+                          <span 
+                            key={idx}
+                            className="text-xs px-2 py-0.5 rounded-full bg-muted/50 text-foreground"
                           >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
+                            {listener.nickname}
+                          </span>
+                        ))}
+                        {listeners.length > 5 && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-muted/50 text-muted-foreground">
+                            +{listeners.length - 5} more
+                          </span>
+                        )}
                       </div>
-                    ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+              
+              <Card className="glass-card">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg icon-gradient-pink flex items-center justify-center">
+                      <MessageSquare className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-display font-bold text-foreground">{messages.length}</p>
+                      <p className="text-sm text-muted-foreground">Chat Messages</p>
+                    </div>
                   </div>
-                )}
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="glass-card">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg icon-gradient-purple flex items-center justify-center">
+                      <Ban className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-display font-bold text-foreground">{bannedUsers.length}</p>
+                      <p className="text-sm text-muted-foreground">Banned Users</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Admin Broadcast */}
+              <Card className="glass-card-pink">
+                <CardHeader>
+                  <CardTitle className="font-display flex items-center gap-2">
+                    <Send className="w-5 h-5 text-primary" />
+                    Admin Broadcast
+                  </CardTitle>
+                  <CardDescription>Send an official message to the chat</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex gap-2">
+                    <Input
+                      value={adminMessage}
+                      onChange={(e) => setAdminMessage(e.target.value)}
+                      placeholder="Type your announcement..."
+                      className="bg-input border-border"
+                      maxLength={200}
+                      onKeyDown={(e) => e.key === "Enter" && handleSendAdminMessage()}
+                    />
+                    <Button 
+                      onClick={handleSendAdminMessage}
+                      className="neon-glow-pink"
+                      disabled={!adminMessage.trim()}
+                    >
+                      <Send className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Message will appear as "👑 DJ Lobo" with 📢 prefix
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Banned Users */}
+              <Card className="glass-card">
+                <CardHeader>
+                  <CardTitle className="font-display flex items-center gap-2">
+                    <Ban className="w-5 h-5 text-destructive" />
+                    Shadow-Banned Users
+                  </CardTitle>
+                  <CardDescription>Users who can't send visible messages</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[150px]">
+                    {bannedUsers.length === 0 ? (
+                      <p className="text-sm text-muted-foreground text-center py-4">
+                        No banned users
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {bannedUsers.map((user) => (
+                          <div 
+                            key={user.id}
+                            className="flex items-center justify-between p-2 rounded-lg bg-muted/30"
+                          >
+                            <div>
+                              <p className="font-medium text-sm">{user.nickname || "Unknown"}</p>
+                              <p className="text-xs text-muted-foreground">
+                                Banned: {formatTime(user.created_at)}
+                              </p>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleUnbanUser(user.id)}
+                              className="text-xs"
+                            >
+                              Unban
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+
+              {/* Recent Messages */}
+              <Card className="glass-card lg:col-span-2">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="font-display flex items-center gap-2">
+                        <MessageSquare className="w-5 h-5 text-secondary" />
+                        Recent Chat Messages
+                      </CardTitle>
+                      <CardDescription>Manage and moderate chat messages</CardDescription>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={fetchMessages}>
+                        Refresh
+                      </Button>
+                      <Button 
+                        variant="destructive" 
+                        size="sm" 
+                        onClick={handleClearAllMessages}
+                        disabled={messages.length === 0}
+                      >
+                        <Trash2 className="w-3 h-3 mr-1" />
+                        Clear All
+                      </Button>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[400px]">
+                    {loading ? (
+                      <div className="flex items-center justify-center py-8">
+                        <div className="loading-spinner" />
+                      </div>
+                    ) : messages.length === 0 ? (
+                      <p className="text-sm text-muted-foreground text-center py-8">
+                        No messages yet
+                      </p>
+                    ) : (
+                      <div className="space-y-2">
+                        {messages.map((msg) => (
+                          <div 
+                            key={msg.id}
+                            className="flex items-start justify-between p-3 rounded-lg bg-muted/20 hover:bg-muted/30 transition-colors group"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-medium text-sm text-primary">
+                                  {msg.nickname}
+                                </span>
+                                <span className="text-xs text-muted-foreground">
+                                  {formatTime(msg.created_at)}
+                                </span>
+                              </div>
+                              <p className="text-sm text-foreground break-words">
+                                {msg.message}
+                              </p>
+                              {msg.session_id && (
+                                <p className="text-xs text-muted-foreground mt-1 font-mono">
+                                  Session: {msg.session_id.substring(0, 8)}...
+                                </p>
+                              )}
+                            </div>
+                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                              {msg.session_id && msg.session_id !== "admin-broadcast" && (
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="h-8 w-8 text-orange-500 hover:text-orange-400 hover:bg-orange-500/10"
+                                  onClick={() => handleBanUser(msg.session_id!, msg.nickname)}
+                                  title="Ban user"
+                                >
+                                  <Ban className="w-4 h-4" />
+                                </Button>
+                              )}
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                onClick={() => handleDeleteMessage(msg.id)}
+                                title="Delete message"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Branding Tab */}
+          <TabsContent value="branding">
+            <BrandingTab />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );

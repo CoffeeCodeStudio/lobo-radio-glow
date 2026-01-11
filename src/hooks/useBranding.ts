@@ -1,0 +1,113 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+
+export interface SiteBranding {
+  id: string;
+  hero_image_url: string | null;
+  logo_url: string | null;
+  background_image_url: string | null;
+  profile_image_url: string | null;
+  primary_glow_color: string | null;
+  secondary_glow_color: string | null;
+  accent_color: string | null;
+  site_name: string | null;
+  tagline: string | null;
+  updated_at: string;
+}
+
+const DEFAULT_BRANDING: Partial<SiteBranding> = {
+  primary_glow_color: "300 100% 50%",
+  secondary_glow_color: "180 100% 50%",
+  accent_color: "270 100% 60%",
+  site_name: "DJ Lobo Radio",
+  tagline: "Bringing the best of 80s and 90s music",
+};
+
+export const useBranding = () => {
+  const [branding, setBranding] = useState<SiteBranding | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchBranding = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("site_branding")
+      .select("*")
+      .limit(1)
+      .maybeSingle();
+
+    if (error) {
+      setError(error.message);
+    } else if (data) {
+      setBranding(data);
+    }
+    setLoading(false);
+  };
+
+  const updateBranding = async (updates: Partial<SiteBranding>) => {
+    if (!branding?.id) return { error: "No branding record found" };
+
+    const { error } = await supabase
+      .from("site_branding")
+      .update(updates)
+      .eq("id", branding.id);
+
+    if (!error) {
+      setBranding((prev) => prev ? { ...prev, ...updates } : null);
+    }
+
+    return { error: error?.message || null };
+  };
+
+  const uploadImage = async (
+    file: File,
+    imageType: "hero" | "logo" | "background" | "profile"
+  ): Promise<{ url: string | null; error: string | null }> => {
+    const fileExt = file.name.split(".").pop();
+    const fileName = `${imageType}-${Date.now()}.${fileExt}`;
+    const filePath = `${imageType}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("branding")
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) {
+      return { url: null, error: uploadError.message };
+    }
+
+    const { data } = supabase.storage.from("branding").getPublicUrl(filePath);
+    return { url: data.publicUrl, error: null };
+  };
+
+  useEffect(() => {
+    fetchBranding();
+  }, []);
+
+  // Apply branding colors to CSS variables
+  useEffect(() => {
+    if (branding) {
+      const root = document.documentElement;
+      if (branding.primary_glow_color) {
+        root.style.setProperty("--neon-pink", branding.primary_glow_color);
+        root.style.setProperty("--primary", branding.primary_glow_color);
+      }
+      if (branding.secondary_glow_color) {
+        root.style.setProperty("--neon-cyan", branding.secondary_glow_color);
+        root.style.setProperty("--secondary", branding.secondary_glow_color);
+      }
+      if (branding.accent_color) {
+        root.style.setProperty("--neon-purple", branding.accent_color);
+        root.style.setProperty("--accent", branding.accent_color);
+      }
+    }
+  }, [branding]);
+
+  return {
+    branding: branding ? { ...DEFAULT_BRANDING, ...branding } : null,
+    loading,
+    error,
+    updateBranding,
+    uploadImage,
+    refetch: fetchBranding,
+  };
+};

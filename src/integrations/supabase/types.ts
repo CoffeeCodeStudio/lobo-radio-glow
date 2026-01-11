@@ -65,6 +65,51 @@ export type Database = {
         }
         Relationships: []
       }
+      site_branding: {
+        Row: {
+          accent_color: string | null
+          background_image_url: string | null
+          created_at: string
+          hero_image_url: string | null
+          id: string
+          logo_url: string | null
+          primary_glow_color: string | null
+          profile_image_url: string | null
+          secondary_glow_color: string | null
+          site_name: string | null
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          accent_color?: string | null
+          background_image_url?: string | null
+          created_at?: string
+          hero_image_url?: string | null
+          id?: string
+          logo_url?: string | null
+          primary_glow_color?: string | null
+          profile_image_url?: string | null
+          secondary_glow_color?: string | null
+          site_name?: string | null
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accent_color?: string | null
+          background_image_url?: string | null
+          created_at?: string
+          hero_image_url?: string | null
+          id?: string
+          logo_url?: string | null
+          primary_glow_color?: string | null
+          profile_image_url?: string | null
+          secondary_glow_color?: string | null
+          site_name?: string | null
+          tagline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

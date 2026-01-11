@@ -1,10 +1,17 @@
 import djLoboImage from "@/assets/dj-lobo-real.jpg";
 import { Radio } from "lucide-react";
+import { useBranding } from "@/hooks/useBranding";
 
 const HeroSection = () => {
+  const { branding } = useBranding();
+  
   const scrollToSchedule = () => {
     document.getElementById("schedule")?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Use dynamic profile image if available, otherwise use the default
+  const profileImage = branding?.profile_image_url || djLoboImage;
+  const siteName = branding?.site_name || "DJ LOBO";
 
   return (
     <section 
@@ -28,7 +35,7 @@ const HeroSection = () => {
       <div className="relative mb-6 sm:mb-8">
         <div className="w-52 h-52 sm:w-64 sm:h-64 md:w-80 md:h-80 rounded-full overflow-hidden neon-border-gradient">
           <img
-            src={djLoboImage}
+            src={profileImage}
             alt="DJ Lobo vid mixerbordet med hörlurar"
             className="w-full h-full object-cover rounded-full"
           />
@@ -42,7 +49,7 @@ const HeroSection = () => {
         id="hero-title"
         className="font-display text-5xl sm:text-6xl md:text-8xl font-black text-neon-gradient mb-3 sm:mb-4 tracking-wider text-high-contrast"
       >
-        DJ LOBO
+        {siteName.toUpperCase().replace(" RADIO", "")}
       </h1>
 
       {/* Tagline */}
