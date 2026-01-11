@@ -346,4 +346,92 @@
       box-shadow: 0 0 20px hsla(30, 100%, 50%, 0.6), 0 0 40px hsla(15, 100%, 50%, 0.4), 0 0 60px hsla(0, 100%, 50%, 0.2);
     }
   }
+
+  /* Book Now Button - Premium Gold/Purple styling */
+  .book-now-button {
+    --gold: 45 100% 50%;
+    --gold-dark: 38 100% 45%;
+    --electric-purple: 280 100% 60%;
+    
+    background: linear-gradient(135deg, hsla(var(--gold), 0.15), hsla(var(--electric-purple), 0.15));
+    border: 2px solid hsl(var(--gold));
+    color: hsl(var(--gold));
+    box-shadow: 
+      0 0 15px hsla(var(--gold), 0.3),
+      0 0 30px hsla(var(--gold), 0.15),
+      inset 0 0 20px hsla(var(--gold), 0.1);
+    animation: book-now-breathe 3.5s ease-in-out infinite;
+  }
+
+  .book-now-button:hover,
+  .book-now-button:focus-visible {
+    transform: scale(1.08);
+    border-color: hsl(var(--electric-purple));
+    color: hsl(0, 0%, 100%);
+    background: linear-gradient(135deg, hsla(var(--gold), 0.3), hsla(var(--electric-purple), 0.3));
+    box-shadow: 
+      0 0 25px hsla(var(--gold), 0.6),
+      0 0 50px hsla(var(--electric-purple), 0.4),
+      0 0 80px hsla(var(--gold), 0.2),
+      inset 0 0 30px hsla(var(--gold), 0.2);
+    outline: none;
+  }
+
+  .book-now-button:active {
+    transform: scale(1.02);
+  }
+
+  /* Breathing glow animation */
+  @keyframes book-now-breathe {
+    0%, 100% {
+      box-shadow: 
+        0 0 10px hsla(var(--gold), 0.25),
+        0 0 20px hsla(var(--gold), 0.1),
+        inset 0 0 15px hsla(var(--gold), 0.08);
+    }
+    50% {
+      box-shadow: 
+        0 0 20px hsla(var(--gold), 0.5),
+        0 0 40px hsla(var(--gold), 0.25),
+        0 0 60px hsla(var(--electric-purple), 0.15),
+        inset 0 0 25px hsla(var(--gold), 0.15);
+    }
+  }
+
+  /* Shine/sheen effect that passes across */
+  .book-now-shine {
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      transparent 40%,
+      hsla(0, 0%, 100%, 0.4) 50%,
+      transparent 60%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: book-now-shine-pass 10s ease-in-out infinite;
+  }
+
+  @keyframes book-now-shine-pass {
+    0%, 90% {
+      transform: translateX(-100%);
+    }
+    95% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .book-now-button {
+      animation: none !important;
+    }
+    .book-now-shine {
+      animation: none !important;
+      display: none;
+    }
+  }
 }

@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { Play, Pause, Volume2, VolumeX, Loader2, WifiOff } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX, Loader2 } from "lucide-react";
 import { Radio } from "lucide-react";
 import { useStreamStatus } from "@/hooks/useStreamStatus";
+import BookNowButton from "./BookNowButton";
 
 const STREAM_URL = "https://stream.zeno.fm/gzzqvbuy0d7uv";
 
@@ -114,6 +115,12 @@ const NowPlayingBar = () => {
       aria-label="Radiospelare"
     >
       <audio ref={audioRef} src={STREAM_URL} preload="none" />
+      
+      {/* Book Now Button - Above player controls */}
+      <div className="flex justify-center pt-3 pb-1">
+        <BookNowButton />
+      </div>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
         {/* Play Button and Visualizer */}
         <div className="flex items-center gap-3 sm:gap-4">
