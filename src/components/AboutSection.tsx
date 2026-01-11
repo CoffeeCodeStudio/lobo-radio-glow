@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import djLoboImage from "@/assets/dj-lobo.jpg";
+import djLoboImage from "@/assets/dj-lobo-real.jpg";
 import { Music, Headphones, Zap } from "lucide-react";
 
 const AboutSection = () => {
