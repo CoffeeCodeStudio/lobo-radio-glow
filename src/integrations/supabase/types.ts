@@ -98,6 +98,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_session_banned: { Args: { p_session_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
