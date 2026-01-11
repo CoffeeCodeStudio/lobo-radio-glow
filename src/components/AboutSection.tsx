@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import djLoboImage from "@/assets/dj-lobo-real.jpg";
-import { Music, Headphones, Zap } from "lucide-react";
+import { Music, Headphones, Zap, Disc } from "lucide-react";
 
 const AboutSection = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -30,27 +30,27 @@ const AboutSection = () => {
 
   const stats = [
     { value: "20+", label: "Years", ariaLabel: "Över 20 års erfarenhet" },
-    { value: "5K+", label: "Vinyl", ariaLabel: "Över 5000 vinylskivor" },
+    { value: "500+", label: "Events", ariaLabel: "Över 500 spelningar" },
     { value: "100K+", label: "Listeners", ariaLabel: "Över 100 000 lyssnare" },
   ];
 
   const features = [
     {
       icon: Music,
-      title: "80-talshits",
-      description: "Synth-pop, rock och discoklassiker",
+      title: "80 & 90-tal",
+      description: "Synth-pop, eurodance och discoklassiker",
       gradient: "icon-gradient-pink",
     },
     {
-      icon: Headphones,
-      title: "90-talsfavoriter",
-      description: "Eurodance, grunge och R&B",
+      icon: Disc,
+      title: "Latin Vibes",
+      description: "Salsa, reggaeton och tropical hits",
       gradient: "icon-gradient-cyan",
     },
     {
-      icon: Zap,
-      title: "Live varje vecka",
-      description: "Färska mixes och specialshower",
+      icon: Headphones,
+      title: "Club & Events",
+      description: "Bröllop, företag och privatfester",
       gradient: "icon-gradient-purple",
     },
   ];
@@ -73,13 +73,14 @@ const AboutSection = () => {
               OM DJ LOBO
             </h2>
             <p className="text-muted-foreground text-base sm:text-lg mb-4 leading-relaxed">
-              DJ Lobo är en passionerad DJ med rötter i 80- och 90-talets gyllene
-              musikera. Med sin unika blandning av klassiska hits och nostalgi skapar
-              han en oförglömlig atmosfär.
+              DJ Lobo har arbetat som professionell DJ i över <span className="text-neon-pink font-semibold">20 år</span>. 
+              Med rötter i Göteborg har han gjort hundratals spelningar på nattklubbar, företagsevent, bröllop och privatfester 
+              – från Club Mamba till Salsa Latino Night på Kajuteriet Malmö.
             </p>
             <p className="text-muted-foreground text-base sm:text-lg mb-6 sm:mb-8 leading-relaxed">
-              Oavsett om det är synth-pop, eurodance eller rock - DJ Lobo tar dig på
-              en resa genom de bästa låtarna från förr, direkt till ditt vardagsrum.
+              Hans unika mix av <span className="text-neon-cyan font-semibold">80- och 90-talsklassiker</span> kombinerat med 
+              het <span className="text-neon-pink font-semibold">latinmusik</span> skapar en oförglömlig atmosfär. 
+              Oavsett om det är synth-pop, eurodance, salsa eller reggaeton – DJ Lobo tar dig på en musikalisk resa!
             </p>
 
             {/* Stats */}

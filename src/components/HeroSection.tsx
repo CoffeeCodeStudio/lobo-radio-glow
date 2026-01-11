@@ -47,8 +47,9 @@ const HeroSection = () => {
 
       {/* Tagline */}
       <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground mb-2 text-center">
-        Din port till <span className="text-neon-pink font-semibold">80s</span> &{" "}
-        <span className="text-neon-cyan font-semibold">90s</span>
+        Din port till <span className="text-neon-pink font-semibold">80s</span>,{" "}
+        <span className="text-neon-cyan font-semibold">90s</span> &{" "}
+        <span className="text-neon-pink font-semibold">Latin</span>
       </p>
 
       {/* Radio vibes */}
