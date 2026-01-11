@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import djLoboImage from "@/assets/dj-lobo-real.jpg";
+import djLoboAboutImage from "@/assets/dj-lobo-about.jpg";
 import { Music, Headphones, Zap, Disc } from "lucide-react";
 
 const AboutSection = () => {
@@ -106,8 +106,8 @@ const AboutSection = () => {
             {/* DJ Image */}
             <div className="scroll-reveal glass-card overflow-hidden">
               <img
-                src={djLoboImage}
-                alt="DJ Lobo vid Pioneer DJ-mixerbord under ett live-event"
+                src={djLoboAboutImage}
+                alt="DJ Lobo spelar latinmusik live"
                 className="w-full h-64 sm:h-80 object-cover"
               />
             </div>
