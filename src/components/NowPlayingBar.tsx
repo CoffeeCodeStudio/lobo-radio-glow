@@ -108,7 +108,7 @@ const NowPlayingBar = () => {
 
   return (
     <div 
-      className={`fixed bottom-0 left-0 right-0 z-50 glass-card border-t transition-colors ${
+      className={`fixed bottom-0 left-0 right-0 z-40 glass-card border-t transition-colors ${
         isPlaying ? "player-active border-neon-cyan/50" : "border-neon-cyan/30"
       }`}
       role="region"
@@ -116,66 +116,134 @@ const NowPlayingBar = () => {
     >
       <audio ref={audioRef} src={STREAM_URL} preload="none" />
       
-      {/* Book Now Button - Above player controls */}
-      <div className="flex justify-center pt-3 pb-1">
-        <BookNowButton />
+      {/* Desktop Layout */}
+      <div className="hidden sm:block">
+        {/* Book Now Button - Above player controls */}
+        <div className="flex justify-center pt-3 pb-1">
+          <BookNowButton />
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          {/* Play Button and Visualizer */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={togglePlay}
+              disabled={isLoading}
+              aria-label={isPlaying ? "Pausa radio" : "Spela radio"}
+              aria-pressed={isPlaying}
+              className="tap-target w-14 h-14 rounded-full bg-gradient-to-r from-neon-pink to-neon-purple flex items-center justify-center hover:scale-110 transition-transform focus-neon disabled:opacity-70"
+            >
+              {isLoading ? (
+                <Loader2 className="w-6 h-6 text-white animate-spin" aria-hidden="true" />
+              ) : isPlaying ? (
+                <Pause className="w-6 h-6 text-white" aria-hidden="true" />
+              ) : (
+                <Play className="w-6 h-6 text-white ml-1" aria-hidden="true" />
+              )}
+            </button>
+
+            {/* Audio Visualizer */}
+            <div className="flex items-end gap-1 h-8" aria-hidden="true">
+              {[1, 2, 3, 4, 5].map((bar) => (
+                <div
+                  key={bar}
+                  className={`w-1 bg-gradient-to-t from-neon-pink to-neon-cyan rounded-full ${
+                    isPlaying && !isLoading ? "visualizer-bar" : "h-2"
+                  }`}
+                  style={{
+                    height: isPlaying && !isLoading ? undefined : "8px",
+                  }}
+                ></div>
+              ))}
+            </div>
+          </div>
+
+          {/* Now Playing Info */}
+          <div className="flex-1 text-center min-w-0">
+            <div className="flex items-center justify-center gap-2 text-neon-cyan text-xs mb-1">
+              <Radio className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
+              <span className="font-medium tracking-wider">
+                {isLoading ? "ANSLUTER..." : isPlaying ? "SPELAR NU" : "NOW PLAYING"}
+              </span>
+            </div>
+            <p className="text-foreground font-medium text-base truncate">
+              DJ Lobo Radio - 80s & 90s Hits
+            </p>
+          </div>
+
+          {/* Volume Control */}
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={toggleMute}
+              aria-label={isMuted ? "Slå på ljud" : "Tysta ljud"}
+              aria-pressed={isMuted}
+              className="tap-target text-muted-foreground hover:text-foreground transition-colors focus-neon rounded-lg"
+            >
+              {isMuted ? (
+                <VolumeX className="w-5 h-5" aria-hidden="true" />
+              ) : (
+                <Volume2 className="w-5 h-5" aria-hidden="true" />
+              )}
+            </button>
+            <div className="relative w-24 h-2 bg-muted rounded-full overflow-hidden">
+              <div
+                className="absolute left-0 top-0 h-full bg-gradient-to-r from-neon-cyan to-neon-pink rounded-full transition-all"
+                style={{ width: `${isMuted ? 0 : volume}%` }}
+                aria-hidden="true"
+              ></div>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={volume}
+                onChange={handleVolumeChange}
+                aria-label={`Volym: ${volume}%`}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
-        {/* Play Button and Visualizer */}
-        <div className="flex items-center gap-3 sm:gap-4">
+
+      {/* Mobile Slim Layout - max 70px */}
+      <div className="sm:hidden">
+        <div className="h-[70px] px-4 flex items-center justify-between gap-3">
+          {/* Play Button */}
           <button
             onClick={togglePlay}
             disabled={isLoading}
             aria-label={isPlaying ? "Pausa radio" : "Spela radio"}
             aria-pressed={isPlaying}
-            className="tap-target w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-neon-pink to-neon-purple flex items-center justify-center hover:scale-110 transition-transform focus-neon disabled:opacity-70"
+            className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-r from-neon-pink to-neon-purple flex items-center justify-center hover:scale-105 active:scale-95 transition-transform focus-neon disabled:opacity-70"
           >
             {isLoading ? (
-              <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 text-white animate-spin" aria-hidden="true" />
+              <Loader2 className="w-5 h-5 text-white animate-spin" aria-hidden="true" />
             ) : isPlaying ? (
-              <Pause className="w-5 h-5 sm:w-6 sm:h-6 text-white" aria-hidden="true" />
+              <Pause className="w-5 h-5 text-white" aria-hidden="true" />
             ) : (
-              <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white ml-1" aria-hidden="true" />
+              <Play className="w-5 h-5 text-white ml-0.5" aria-hidden="true" />
             )}
           </button>
 
-          {/* Audio Visualizer */}
-          <div className="hidden sm:flex items-end gap-1 h-8" aria-hidden="true">
-            {[1, 2, 3, 4, 5].map((bar) => (
-              <div
-                key={bar}
-                className={`w-1 bg-gradient-to-t from-neon-pink to-neon-cyan rounded-full ${
-                  isPlaying && !isLoading ? "visualizer-bar" : "h-2"
-                }`}
-                style={{
-                  height: isPlaying && !isLoading ? undefined : "8px",
-                }}
-              ></div>
-            ))}
+          {/* Now Playing Info - Truncated */}
+          <div className="flex-1 min-w-0 text-center">
+            <div className="flex items-center justify-center gap-1.5 text-neon-cyan text-[10px] mb-0.5">
+              <Radio className="w-2.5 h-2.5 flex-shrink-0" aria-hidden="true" />
+              <span className="font-medium tracking-wider uppercase">
+                {isLoading ? "Ansluter..." : isPlaying ? "Live" : "Radio"}
+              </span>
+            </div>
+            <p className="text-foreground font-medium text-sm truncate px-1">
+              DJ Lobo Radio
+            </p>
           </div>
-        </div>
 
-        {/* Now Playing Info */}
-        <div className="flex-1 text-center min-w-0">
-          <div className="flex items-center justify-center gap-2 text-neon-cyan text-xs mb-1">
-            <Radio className="w-3 h-3 flex-shrink-0" aria-hidden="true" />
-            <span className="font-medium tracking-wider">
-              {isLoading ? "ANSLUTER..." : isPlaying ? "SPELAR NU" : "NOW PLAYING"}
-            </span>
-          </div>
-          <p className="text-foreground font-medium text-sm sm:text-base truncate">
-            DJ Lobo Radio - 80s & 90s Hits
-          </p>
-        </div>
-
-        {/* Volume Control */}
-        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Mute Button Only on Mobile */}
           <button 
             onClick={toggleMute}
             aria-label={isMuted ? "Slå på ljud" : "Tysta ljud"}
             aria-pressed={isMuted}
-            className="tap-target text-muted-foreground hover:text-foreground transition-colors focus-neon rounded-lg"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors focus-neon rounded-lg"
           >
             {isMuted ? (
               <VolumeX className="w-5 h-5" aria-hidden="true" />
@@ -183,22 +251,6 @@ const NowPlayingBar = () => {
               <Volume2 className="w-5 h-5" aria-hidden="true" />
             )}
           </button>
-          <div className="relative w-16 sm:w-24 h-2 bg-muted rounded-full overflow-hidden">
-            <div
-              className="absolute left-0 top-0 h-full bg-gradient-to-r from-neon-cyan to-neon-pink rounded-full transition-all"
-              style={{ width: `${isMuted ? 0 : volume}%` }}
-              aria-hidden="true"
-            ></div>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={volume}
-              onChange={handleVolumeChange}
-              aria-label={`Volym: ${volume}%`}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            />
-          </div>
         </div>
       </div>
     </div>

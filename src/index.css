@@ -51,15 +51,19 @@
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -312,6 +316,13 @@
   .text-high-contrast {
     color: hsl(0, 0%, 100%);
     text-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.5);
+  }
+
+  /* Text overflow ellipsis utility */
+  .text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* Active playing state */

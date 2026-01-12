@@ -9,7 +9,45 @@ const SOCIAL_LINKS = {
 
 const Footer = () => {
   return (
-    <footer className="py-12 sm:py-16 px-4 sm:px-6 pb-28 sm:pb-32 relative">
+    <footer className="py-12 sm:py-16 px-4 sm:px-6 pb-24 sm:pb-32 relative">
+      {/* Coffee Code Studio Signature - Fixed position on mobile */}
+      <div className="sm:hidden fixed bottom-[78px] left-0 right-0 z-50 py-2 bg-background/90 backdrop-blur-sm border-t border-white/5">
+        <a
+          href="https://www.linkedin.com/in/rami-e-453b77330/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center justify-center gap-1.5 text-xs focus-neon rounded px-2 py-1"
+          aria-label="Besök Coffee Code Studio (öppnas i nytt fönster)"
+        >
+          <span 
+            className="text-neon-cyan font-bold"
+            style={{ textShadow: "0 0 12px rgba(0, 255, 255, 0.6)" }}
+          >
+            &lt;
+          </span>
+          <span 
+            className="text-base"
+            style={{ 
+              filter: "drop-shadow(0 0 8px rgba(0, 255, 255, 0.5))",
+            }}
+          >
+            ☕️
+          </span>
+          <span 
+            className="text-neon-cyan font-bold"
+            style={{ textShadow: "0 0 12px rgba(0, 255, 255, 0.6)" }}
+          >
+            &gt;
+          </span>
+          <span 
+            className="ml-1 font-semibold tracking-wide text-white"
+            style={{ textShadow: "0 0 10px rgba(0, 255, 255, 0.4)" }}
+          >
+            Coffee Code Studio
+          </span>
+        </a>
+      </div>
+
       <div className="max-w-7xl mx-auto text-center">
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6">
@@ -24,7 +62,7 @@ const Footer = () => {
         </div>
 
         {/* Description */}
-        <p className="text-muted-foreground/80 max-w-md mx-auto mb-6 sm:mb-8 text-sm sm:text-base">
+        <p className="text-muted-foreground/80 max-w-md mx-auto mb-6 sm:mb-8 text-sm sm:text-base px-2">
           Bringing the best of 80s and 90s music to your ears. Tune in and let the
           nostalgia flow.
         </p>
@@ -116,36 +154,39 @@ const Footer = () => {
         </nav>
       </div>
 
-      {/* Coffee Code Studio Signature */}
-      <div className="mt-12 pt-6 border-t border-white/5">
+      {/* Desktop Signature - Hidden on mobile */}
+      <div className="hidden sm:block mt-12 pt-6 border-t border-white/5">
         <a
           href="https://www.linkedin.com/in/rami-e-453b77330/"
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex items-center justify-center gap-1.5 text-xs text-muted-foreground/70 hover:text-muted-foreground transition-colors duration-300 focus-neon rounded px-2 py-1"
+          className="group flex items-center justify-center gap-1.5 text-sm text-muted-foreground/80 hover:text-white transition-colors duration-300 focus-neon rounded px-2 py-1"
           aria-label="Besök Coffee Code Studio (öppnas i nytt fönster)"
         >
           <span 
-            className="transition-all duration-300 group-hover:text-neon-cyan"
-            style={{ textShadow: "0 0 8px rgba(0, 255, 255, 0.3)" }}
+            className="transition-all duration-300 text-neon-cyan font-bold"
+            style={{ textShadow: "0 0 12px rgba(0, 255, 255, 0.5)" }}
           >
             &lt;
           </span>
           <span 
-            className="transition-all duration-300 group-hover:scale-110"
+            className="text-lg transition-all duration-300 group-hover:scale-110"
             style={{ 
-              filter: "drop-shadow(0 0 6px rgba(0, 255, 255, 0.4))",
+              filter: "drop-shadow(0 0 8px rgba(0, 255, 255, 0.5))",
             }}
           >
             ☕️
           </span>
           <span 
-            className="transition-all duration-300 group-hover:text-neon-cyan"
-            style={{ textShadow: "0 0 8px rgba(0, 255, 255, 0.3)" }}
+            className="transition-all duration-300 text-neon-cyan font-bold"
+            style={{ textShadow: "0 0 12px rgba(0, 255, 255, 0.5)" }}
           >
             &gt;
           </span>
-          <span className="ml-1 font-medium tracking-wide">
+          <span 
+            className="ml-1 font-semibold tracking-wide"
+            style={{ textShadow: "0 0 8px rgba(0, 255, 255, 0.3)" }}
+          >
             Coffee Code Studio
           </span>
         </a>
