@@ -1,7 +1,7 @@
 import { Globe, ChevronDown } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useLanguage, Language } from "@/contexts/LanguageContext";
-import djLoboLogo from "@/assets/dj-lobo-logo.png";
+import djLoboLogo from "@/assets/dj-lobo-badge.png";
 
 interface LanguageOption {
   code: Language;
