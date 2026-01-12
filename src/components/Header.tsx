@@ -41,8 +41,8 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-3 sm:py-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
+    <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-3 sm:py-4 pointer-events-none">
+      <div className="max-w-7xl mx-auto flex justify-between items-center pointer-events-auto">
         {/* Logo */}
         <a 
           href="#" 
@@ -83,7 +83,7 @@ const Header = () => {
             <ul
               role="listbox"
               aria-label="Välj språk"
-              className="absolute right-0 mt-2 w-40 glass-card rounded-lg overflow-hidden py-1 shadow-lg border border-neon-cyan/20"
+              className="absolute right-0 mt-2 w-40 glass-card rounded-lg overflow-hidden py-1 shadow-lg border border-neon-cyan/20 z-[60]"
             >
               {languages.map((lang) => (
                 <li

@@ -24,13 +24,15 @@ const Index = () => {
       {/* Main content */}
       <div className="relative z-10">
         <Header />
-        <main id="main-content" tabIndex={-1}>
-          <HeroSection />
-          <AboutSection />
-          <ScheduleSection />
-          <CalendarSection />
-          <SocialGallerySection />
-          <LiveChat />
+        <main id="main-content" tabIndex={-1} className="px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto">
+            <HeroSection />
+            <AboutSection />
+            <ScheduleSection />
+            <CalendarSection />
+            <SocialGallerySection />
+            <LiveChat />
+          </div>
         </main>
         <Footer />
         <NowPlayingBar />
