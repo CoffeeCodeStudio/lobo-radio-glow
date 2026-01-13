@@ -26,14 +26,15 @@ const BookNowButton = () => {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={t.ariaLabel}
-      className="book-now-button group relative inline-flex items-center gap-2 px-6 py-3 rounded-full font-display font-bold tracking-wider text-sm sm:text-base transition-all duration-300 overflow-hidden"
+      className="book-now-button group relative inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-2 sm:py-3 rounded-full font-display font-bold tracking-wider text-xs sm:text-base transition-all duration-300 overflow-hidden whitespace-nowrap"
     >
       {/* Shine effect overlay */}
       <span className="book-now-shine absolute inset-0 pointer-events-none" aria-hidden="true" />
       
       {/* Button content */}
-      <Calendar className="w-4 h-4 sm:w-5 sm:h-5 relative z-10" aria-hidden="true" />
-      <span className="relative z-10">{t.bookNow}</span>
+      <Calendar className="w-3.5 h-3.5 sm:w-5 sm:h-5 relative z-10 flex-shrink-0" aria-hidden="true" />
+      <span className="relative z-10 hidden xs:inline">{t.bookNow}</span>
+      <span className="relative z-10 xs:hidden">BOKA</span>
     </a>
   );
 };

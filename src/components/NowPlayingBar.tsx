@@ -226,30 +226,13 @@ const NowPlayingBar = () => {
 
           {/* Now Playing Info - Truncated */}
           <div className="flex-1 min-w-0 text-center">
-            <div className="flex items-center justify-center gap-1 text-neon-cyan text-[9px] mb-0.5">
-              <Radio className="w-2 h-2 flex-shrink-0" aria-hidden="true" />
-              <span className="font-medium tracking-wider uppercase">
-                {isLoading ? "..." : isPlaying ? "Live" : "Radio"}
-              </span>
-            </div>
             <p className="text-foreground font-medium text-xs truncate">
-              DJ Lobo Radio
+              DJ Lobo Radio - 80s & 90s Hits
             </p>
           </div>
 
-          {/* Mute Button Only on Mobile */}
-          <button 
-            onClick={toggleMute}
-            aria-label={isMuted ? "Slå på ljud" : "Tysta ljud"}
-            aria-pressed={isMuted}
-            className="flex-shrink-0 w-9 h-9 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors focus-neon rounded-lg"
-          >
-            {isMuted ? (
-              <VolumeX className="w-4 h-4" aria-hidden="true" />
-            ) : (
-              <Volume2 className="w-4 h-4" aria-hidden="true" />
-            )}
-          </button>
+          {/* Book Now Button - Mobile */}
+          <BookNowButton />
         </div>
       </div>
     </div>
