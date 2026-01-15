@@ -146,17 +146,17 @@ const HeroSection = () => {
         )}
       </div>
 
-      {/* DJ Image with neon border */}
+      {/* DJ Image with neon border and 124 BPM pulse */}
       <div className="relative mb-6 sm:mb-8">
-        <div className="w-52 h-52 sm:w-64 sm:h-64 md:w-80 md:h-80 rounded-full overflow-hidden neon-border-gradient">
+        <div className="w-52 h-52 sm:w-64 sm:h-64 md:w-80 md:h-80 rounded-full overflow-hidden neon-border-gradient profile-bpm-pulse bpm-pulse-124">
           <img
             src={profileImage}
             alt="DJ Lobo vid mixerbordet med hörlurar"
             className="w-full h-full object-cover rounded-full"
           />
         </div>
-        {/* Glow effect behind image */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-neon-pink/30 to-neon-cyan/30 blur-3xl -z-10 scale-110" aria-hidden="true"></div>
+        {/* Pulsing glow effect behind image synced to 124 BPM */}
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-neon-pink/30 to-neon-cyan/30 blur-3xl -z-10 scale-110 bpm-pulse-124" aria-hidden="true"></div>
       </div>
 
       {/* Title */}
