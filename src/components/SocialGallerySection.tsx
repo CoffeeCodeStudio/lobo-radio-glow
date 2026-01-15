@@ -1,14 +1,20 @@
-import { Instagram, Facebook, Youtube, Play, ImageIcon } from "lucide-react";
+import { useState } from "react";
+import { Instagram, Facebook, Youtube, Play, ImageIcon, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useGallery } from "@/hooks/useGallery";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useBranding } from "@/hooks/useBranding";
+import MixcloudModal from "@/components/MixcloudModal";
 
 const SOCIAL_LINKS = {
   instagram: "https://www.instagram.com/djloboradio",
   facebook: "https://www.facebook.com/djloboradiodjs/",
   youtube: "https://www.youtube.com/@djloboproducciones3211",
+  mixcloud: "https://www.mixcloud.com/DjLobo75/",
 };
+
+// IDs 2 and 5 are Mixcloud-connected cards
+const MIXCLOUD_CARD_IDS = [2, 5];
 
 // Static placeholder videos until API integration is ready
 const PLACEHOLDER_VIDEOS = [
@@ -16,37 +22,43 @@ const PLACEHOLDER_VIDEOS = [
     id: 1, 
     title: "DJ Lobo Exclusive", 
     subtitle: "Coming Soon",
-    image: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=600&h=400&fit=crop"
+    image: "https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=600&h=400&fit=crop",
+    mixcloud: false,
   },
   { 
     id: 2, 
     title: "Live Mix Session", 
-    subtitle: "Coming Soon",
-    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop"
+    subtitle: "Mixcloud",
+    image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&h=400&fit=crop",
+    mixcloud: true,
   },
   { 
     id: 3, 
     title: "Festival Set 2024", 
     subtitle: "Coming Soon",
-    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=400&fit=crop"
+    image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&h=400&fit=crop",
+    mixcloud: false,
   },
   { 
     id: 4, 
     title: "Club Night Special", 
     subtitle: "Coming Soon",
-    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&h=400&fit=crop"
+    image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&h=400&fit=crop",
+    mixcloud: false,
   },
   { 
     id: 5, 
     title: "80s & 90s Retro Mix", 
-    subtitle: "Coming Soon",
-    image: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=600&h=400&fit=crop"
+    subtitle: "Mixcloud",
+    image: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=600&h=400&fit=crop",
+    mixcloud: true,
   },
   { 
     id: 6, 
     title: "Summer Party Vibes", 
     subtitle: "Coming Soon",
-    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=400&fit=crop"
+    image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&h=400&fit=crop",
+    mixcloud: false,
   },
 ];
 
@@ -113,8 +125,17 @@ const SocialGallerySection = () => {
   const { branding } = useBranding();
   const t = translations[language];
   
+  // Mixcloud modal state
+  const [mixcloudModalOpen, setMixcloudModalOpen] = useState(false);
+  const [selectedMixcloudTitle, setSelectedMixcloudTitle] = useState("");
+  
   // Featured video from branding (shown as main video)
   const featuredVideoId = branding?.youtube_video_id || "ea8_sn1xlcE";
+
+  const handleMixcloudClick = (title: string) => {
+    setSelectedMixcloudTitle(title);
+    setMixcloudModalOpen(true);
+  };
 
   return (
     <section className="py-16 sm:py-24 px-4 sm:px-6" aria-labelledby="social-gallery-heading">
@@ -245,7 +266,7 @@ const SocialGallerySection = () => {
           </div>
         </div>
 
-        {/* Coming Soon Video Previews */}
+        {/* Coming Soon Video Previews with 124 BPM pulse borders */}
         <div>
           <h3 className="font-display text-xl sm:text-2xl font-bold text-neon-cyan mb-6 flex items-center gap-3">
             <Play className="w-6 h-6" />
@@ -253,53 +274,89 @@ const SocialGallerySection = () => {
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PLACEHOLDER_VIDEOS.map((video) => (
-              <div
-                key={video.id}
-                className="glass-card overflow-hidden group hover:border-neon-cyan/50 transition-all duration-300 cursor-default"
-              >
-                {/* Neon/DJ Themed Thumbnail */}
-                <div className="aspect-video relative">
-                  <img
-                    src={video.image}
-                    alt={video.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  
-                  {/* Overlay with Coming Soon badge */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/50 transition-colors">
-                    <div 
-                      className="px-6 py-3 rounded-full bg-gradient-to-r from-neon-pink to-neon-cyan text-white font-bold text-sm uppercase tracking-wider"
-                      style={{
-                        boxShadow: "0 0 30px rgba(255, 0, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.3)",
-                      }}
-                    >
-                      {video.subtitle}
+            {PLACEHOLDER_VIDEOS.map((video) => {
+              const isMixcloud = video.mixcloud;
+              
+              return (
+                <div
+                  key={video.id}
+                  onClick={isMixcloud ? () => handleMixcloudClick(video.title) : undefined}
+                  className={`glass-card overflow-hidden group transition-all duration-300 card-bpm-pulse video-card-hover ${
+                    isMixcloud 
+                      ? 'cursor-pointer hover:border-neon-pink/70' 
+                      : 'cursor-default hover:border-neon-cyan/50'
+                  }`}
+                >
+                  {/* Neon/DJ Themed Thumbnail */}
+                  <div className="aspect-video relative">
+                    <img
+                      src={video.image}
+                      alt={video.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    
+                    {/* Overlay - different for Mixcloud vs Coming Soon */}
+                    <div className={`absolute inset-0 flex items-center justify-center transition-colors ${
+                      isMixcloud 
+                        ? 'bg-black/30 group-hover:bg-black/20' 
+                        : 'bg-black/40 group-hover:bg-black/50'
+                    }`}>
+                      {isMixcloud ? (
+                        <div 
+                          className="px-6 py-3 rounded-full bg-gradient-to-r from-neon-pink to-neon-cyan text-white font-bold text-sm uppercase tracking-wider flex items-center gap-2 group-hover:scale-110 transition-transform"
+                          style={{
+                            boxShadow: "0 0 30px rgba(255, 0, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.4)",
+                          }}
+                        >
+                          <Headphones className="w-4 h-4" />
+                          Lyssna Nu
+                        </div>
+                      ) : (
+                        <div 
+                          className="px-6 py-3 rounded-full bg-gradient-to-r from-neon-pink to-neon-cyan text-white font-bold text-sm uppercase tracking-wider"
+                          style={{
+                            boxShadow: "0 0 30px rgba(255, 0, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.3)",
+                          }}
+                        >
+                          {video.subtitle}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Badge - different for Mixcloud */}
+                    <div className="absolute top-3 left-3">
+                      <span className={`px-2 py-1 rounded text-xs font-semibold flex items-center gap-1 text-white ${
+                        isMixcloud ? 'bg-neon-cyan/90' : 'bg-neon-pink/90'
+                      }`}>
+                        {isMixcloud ? <Headphones className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                        {isMixcloud ? 'Mixcloud' : t.exclusive}
+                      </span>
                     </div>
                   </div>
 
-                  {/* DJ Lobo Exclusive badge */}
-                  <div className="absolute top-3 left-3">
-                    <span className="px-2 py-1 rounded text-xs font-semibold flex items-center gap-1 bg-neon-pink/90 text-white">
-                      <Play className="w-3 h-3" />
-                      {t.exclusive}
-                    </span>
+                  {/* Video Info */}
+                  <div className="p-4">
+                    <h4 className="font-semibold text-foreground group-hover:text-neon-cyan transition-colors line-clamp-2">
+                      {video.title}
+                    </h4>
+                    <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
+                      {isMixcloud ? (
+                        <>
+                          <Headphones className="w-3 h-3" />
+                          Mixcloud
+                        </>
+                      ) : (
+                        <>
+                          <Youtube className="w-3 h-3" />
+                          DJ Lobo Producciones
+                        </>
+                      )}
+                    </p>
                   </div>
                 </div>
-
-                {/* Video Info */}
-                <div className="p-4">
-                  <h4 className="font-semibold text-foreground group-hover:text-neon-cyan transition-colors line-clamp-2">
-                    {video.title}
-                  </h4>
-                  <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
-                    <Youtube className="w-3 h-3" />
-                    DJ Lobo Producciones
-                  </p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           
           {/* Link to full channel */}
@@ -317,6 +374,14 @@ const SocialGallerySection = () => {
           </div>
         </div>
       </div>
+
+      {/* Mixcloud Modal */}
+      <MixcloudModal
+        isOpen={mixcloudModalOpen}
+        onClose={() => setMixcloudModalOpen(false)}
+        title={selectedMixcloudTitle}
+        mixcloudUrl={SOCIAL_LINKS.mixcloud}
+      />
     </section>
   );
 };

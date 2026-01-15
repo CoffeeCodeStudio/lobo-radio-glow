@@ -199,27 +199,102 @@
     transform: translateY(0);
   }
 
-  /* Light leak backgrounds */
-  .light-leak-purple {
+  /* Moving mesh gradient background */
+  .mesh-gradient-bg {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 40vw;
-    height: 40vh;
-    background: radial-gradient(ellipse at top left, hsla(270, 100%, 30%, 0.3) 0%, transparent 70%);
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 20% 30%, hsla(270, 100%, 20%, 0.4) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, hsla(220, 100%, 15%, 0.5) 0%, transparent 50%),
+      radial-gradient(ellipse 50% 60% at 50% 50%, hsla(260, 80%, 10%, 0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 40% at 70% 20%, hsla(280, 100%, 15%, 0.35) 0%, transparent 50%);
+    animation: mesh-flow 25s ease-in-out infinite;
     pointer-events: none;
     z-index: 0;
   }
 
-  .light-leak-blue {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 40vw;
-    height: 40vh;
-    background: radial-gradient(ellipse at bottom right, hsla(220, 100%, 30%, 0.3) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
+  @keyframes mesh-flow {
+    0%, 100% {
+      background-position: 0% 0%, 100% 100%, 50% 50%, 30% 70%;
+      transform: scale(1);
+    }
+    25% {
+      background-position: 10% 20%, 90% 80%, 60% 40%, 40% 60%;
+      transform: scale(1.02);
+    }
+    50% {
+      background-position: 20% 10%, 80% 90%, 40% 60%, 50% 50%;
+      transform: scale(1);
+    }
+    75% {
+      background-position: 5% 15%, 95% 85%, 55% 45%, 35% 65%;
+      transform: scale(1.01);
+    }
+  }
+
+  /* 124 BPM neon pulse animation (0.484s per beat) */
+  .bpm-pulse-124 {
+    animation: bpm-pulse 0.484s ease-in-out infinite;
+  }
+
+  @keyframes bpm-pulse {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px hsla(var(--neon-pink), 0.4),
+        0 0 40px hsla(var(--neon-cyan), 0.2);
+    }
+    50% {
+      box-shadow: 
+        0 0 35px hsla(var(--neon-pink), 0.7),
+        0 0 70px hsla(var(--neon-cyan), 0.4),
+        0 0 100px hsla(var(--neon-pink), 0.2);
+    }
+  }
+
+  /* Profile image 124 BPM breathing pulse */
+  .profile-bpm-pulse::before {
+    animation: profile-bpm-glow 0.484s ease-in-out infinite;
+  }
+
+  @keyframes profile-bpm-glow {
+    0%, 100% {
+      opacity: 0.8;
+      filter: blur(0px);
+    }
+    50% {
+      opacity: 1;
+      filter: blur(2px);
+    }
+  }
+
+  /* Card border 124 BPM pulse */
+  .card-bpm-pulse {
+    animation: card-border-pulse 0.484s ease-in-out infinite;
+    border-color: hsla(var(--neon-cyan), 0.4);
+  }
+
+  @keyframes card-border-pulse {
+    0%, 100% {
+      border-color: hsla(var(--neon-cyan), 0.3);
+      box-shadow: 
+        0 0 10px hsla(var(--neon-cyan), 0.15),
+        inset 0 0 10px hsla(var(--neon-pink), 0.05);
+    }
+    50% {
+      border-color: hsla(var(--neon-pink), 0.6);
+      box-shadow: 
+        0 0 25px hsla(var(--neon-pink), 0.35),
+        0 0 50px hsla(var(--neon-cyan), 0.2),
+        inset 0 0 15px hsla(var(--neon-pink), 0.1);
+    }
+  }
+
+  /* Video card hover enhancement */
+  .video-card-hover:hover {
+    transform: scale(1.02);
+    box-shadow: 
+      0 0 40px hsla(var(--neon-cyan), 0.5),
+      0 0 80px hsla(var(--neon-pink), 0.3);
   }
 
   /* Icon gradient backgrounds */
@@ -273,8 +348,16 @@
     .on-air-pulse,
     .live-dot,
     .visualizer-bar,
-    .animate-float {
+    .animate-float,
+    .bpm-pulse-124,
+    .card-bpm-pulse,
+    .mesh-gradient-bg,
+    .profile-bpm-pulse::before {
       animation: none !important;
+    }
+
+    .video-card-hover:hover {
+      transform: none;
     }
 
     .scroll-reveal {

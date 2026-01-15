@@ -2,7 +2,6 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ScheduleSection from "@/components/ScheduleSection";
-import CalendarSection from "@/components/CalendarSection";
 import SocialGallerySection from "@/components/SocialGallerySection";
 import LiveChat from "@/components/LiveChat";
 import Footer from "@/components/Footer";
@@ -17,9 +16,8 @@ const Index = () => {
         Hoppa till huvudinnehåll
       </a>
 
-      {/* Light leak backgrounds */}
-      <div className="light-leak-purple" aria-hidden="true"></div>
-      <div className="light-leak-blue" aria-hidden="true"></div>
+      {/* Moving mesh gradient background */}
+      <div className="mesh-gradient-bg" aria-hidden="true"></div>
 
       {/* Main content */}
       <div className="relative z-10">
@@ -29,7 +27,6 @@ const Index = () => {
             <HeroSection />
             <AboutSection />
             <ScheduleSection />
-            <CalendarSection />
             <SocialGallerySection />
             <LiveChat />
           </div>
